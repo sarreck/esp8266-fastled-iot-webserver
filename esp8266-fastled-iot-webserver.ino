@@ -55,18 +55,18 @@ extern "C" {
 
 /*######################## MAIN CONFIG ########################*/
 #define LED_TYPE            WS2812B                     // You might also use a WS2811 or any other strip that is Fastled compatible 
-#define DATA_PIN            D3                          // Be aware: the pin mapping might be different on boards like the NodeMCU
+#define DATA_PIN            D4                          // Be aware: the pin mapping might be different on boards like the NodeMCU
 //#define CLK_PIN             D5                        // Only required when using 4-pin SPI-based LEDs
 #define CORRECTION          UncorrectedColor            // If colors are weird use TypicalLEDStrip
 #define COLOR_ORDER         GRB                         // Change this if colors are swapped (in my case, red was swapped with green)
-#define MILLI_AMPS          10000                       // IMPORTANT: set the max milli-Amps of your power supply (4A = 4000mA)
+#define MILLI_AMPS          20000                       // IMPORTANT: set the max milli-Amps of your power supply (4A = 4000mA)
 #define VOLTS               5                           // Voltage of the Power Supply
 
 //#define REMOVE_VISUALIZATION          // remove the comment to completly disable all udp-based visualization patterns
 
-#define DEFAULT_HOSTNAME "LEDs"         // Name that appears in your network, don't use whitespaces, use "-" instead
+#define DEFAULT_HOSTNAME "LED-CLOCK"         // Name that appears in your network, don't use whitespaces, use "-" instead
 
-#define DEVICE_TYPE 0                   // The following types are available
+#define DEVICE_TYPE 2                   // The following types are available
 /*
     0: Generic LED-Strip: a regular LED-Strip without any special arrangement (and Infinity Mirror + Bottle Lighting Pad)
         * Easiest: 5V WS2812B LED-Strip:            https://s.click.aliexpress.com/e/_dZ1hCJ7
@@ -110,16 +110,16 @@ extern "C" {
     //#define AddLogoVisualizers          // (only 32x8) Adds Visualization patterns with logo (currently only HBz)
 #elif DEVICE_TYPE == 2              // 7-Segment Clock
     #define NTP_REFRESH_INTERVAL_SECONDS 600            // 10 minutes
-    const char* ntpServerName = "at.pool.ntp.org";      // Austrian ntp-timeserver
-    int t_offset = 1;                                   // offset added to the time from the ntp server
+    const char* ntpServerName = "au.pool.ntp.org";      // Austrian ntp-timeserver
+    int t_offset = 10;                                   // offset added to the time from the ntp server
     bool updateColorsEverySecond = false;               // if set to false it will update colors every minute (time patterns only)
     const int NTP_PACKET_SIZE = 48;
     bool switchedTimePattern = true;
-    #define NUM_LEDS 30
+    #define NUM_LEDS 258
     #define Digit1 0
-    #define Digit2 7
-    #define Digit3 16
-    #define Digit4 23
+    #define Digit2 63
+    #define Digit3 133
+    #define Digit4 195
     // Values for the Big Clock: 58, 0, 14, 30, 44
 
 #elif DEVICE_TYPE == 3              // Desk Lamp
@@ -142,7 +142,7 @@ extern "C" {
 //---------------------------------------------------------------------------------------------------------//
 // Feature Configuration: Enabled by removing the "//" in front of the define statements
 //---------------------------------------------------------------------------------------------------------//
-    //#define ENABLE_OTA_SUPPORT                // requires ArduinoOTA - library, not working on esp's with 1MB memory (esp-01, Wemos D1 lite ...)
+    #define ENABLE_OTA_SUPPORT                // requires ArduinoOTA - library, not working on esp's with 1MB memory (esp-01, Wemos D1 lite ...)
         //#define OTA_PASSWORD "passwd123"      //  password that is required to update the esp's firmware wireless
 
     #define ENABLE_MULTICAST_DNS              // allows to access the UI via "http://<HOSTNAME>.local/", implemented by GitHub/WarDrake
@@ -156,7 +156,7 @@ extern "C" {
 
     //#define ENABLE_SERIAL_AMBILIGHT           // allows to function as an ambilight behind a monitor by using data from usb-serial (integration of adalight)
 
-    //#define ENABLE_MQTT_SUPPORT               // allows integration in homeassistant/googlehome/mqtt, 
+    #define ENABLE_MQTT_SUPPORT               // allows integration in homeassistant/googlehome/mqtt, 
                                                 // mqtt server required, see MQTT Configuration for more, implemented by GitHub/WarDrake
 
 //---------------------------------------------------------------------------------------------------------//
@@ -258,10 +258,10 @@ if you have connected the ring first it should look like this: const int twpOffs
 #ifdef ENABLE_MQTT_SUPPORT
     // these are deafault settings which can be changed in the web interface "settings" page
     #define MQTT_ENABLED 0
-    #define MQTT_HOSTNAME "homeassistant.local"
+    #define MQTT_HOSTNAME "192.168.20.110"
     #define MQTT_PORT 1883
-    #define MQTT_USER "MyUserName"
-    #define MQTT_PASS ""
+    #define MQTT_USER "openhab"
+    #define MQTT_PASS "Jedi1745master"
     #if DEVICE_TYPE == 0
         #define MQTT_TOPIC "homeassistant/light/ledstrip"               // MQTT Topic to Publish to for state and config (Home Assistant)
         #define MQTT_TOPIC_SET "/set"                                   // MQTT Topic to subscribe to for changes(Home Assistant)
